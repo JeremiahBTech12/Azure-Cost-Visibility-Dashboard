@@ -6,7 +6,7 @@ Project Overview
 A cost tracking and alerting system that gives business owners real-time visibility into their Azure spend, automatically alerts them before bills become a problem, and presents spending in plain language through a dashboard.
 
 Business Problem
-Most small businesses move to the cloud because expecting to save money than managing their own servers. Then the invoices start arriving — full of line items like "Microsoft.Compute/virtualMachines — $340" that nobody in the business can interpret, predict, or justify to anyone else.
+Most small businesses move to the cloud because they're expecting to save money over having to manage their own servers. Then the invoices start arriving full of line items like "Microsoft.Compute/virtualMachines — $340" that nobody in the business can interpret, predict, or justify to anyone else.
 
 This project remedies that completely. I built a system that:
    - Tracks spending across all Azure services and translates it into categories that makes sense to             business owners.
@@ -36,12 +36,13 @@ az account show
 
 
   FOLDER SETUP: Create a project directory and move into it.
+   ( I used the Windows Powershell for this project along with VScode)
   - New-Item -ItemType Directory -Path "$HOME\cost-dashboard-001"
 cd "$HOME\cost-dashboard-001"
 New-Item -ItemType File main.tf, variables.tf, outputs.tf, terraform.tfvars
 
 
-Step 1- Writing 
+Step 1- Writing variables.tf (Posted in variables.tf Tab)
 
 - Logic App Configuration
 
