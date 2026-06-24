@@ -1,5 +1,5 @@
-variable "yourname" {
-  description = "Your name, lowercase, no spaces. Used to make resource names unique."
+variable "Jeremiah" {
+  description = "my name, lowercase, no spaces. Used to make resource names unique."
   type        = string
 }
  
@@ -9,7 +9,7 @@ variable "location" {
   default     = "East US"
 }
  
-variable "alert_email" {
+variable "jeremiahbrown1288@gmail.com" {
   description = "Email address to receive cost alert notifications."
   type        = string
 }
