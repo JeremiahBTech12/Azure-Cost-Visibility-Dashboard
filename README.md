@@ -135,22 +135,54 @@ Review the plan. You should see 6 resources to add: resource group, log analytic
 terraform apply
 Type yes when prompted. Deployment takes approximately 2–3 minutes.
 
+Step 6- Configure the Logic App Workflow in the Portal
+
+Terraform created the Logic App container. Now you will add the trigger and action steps using the visual designer.
+
+1. In the Azure portal, navigate to your resource group rg-cost-dashboard-[yourname]
+2. Click on la-cost-alert-[yourname]
+3. In the left menu, click Logic app designer
+4. Click Add a trigger → search for HTTP → select When a HTTP request is received
+5. Copy the HTTP POST URL that appears — this is the webhook URL Azure Monitor will call when a budget alert fires
+6. Click + New step → search for Office 365 Outlook → select Send an email (V2)
+7. Sign in with your Microsoft account when prompted
+8. Fill in the email fields:
+	- To: your alert email address
+	- Subject: Azure Cost Alert — Budget Threshold Reached
+	- Body: Click Add dynamic content and add the Body field from the 	HTTP trigger — this contains the full alert details
+9. Click Save
+
+Connect the Logic App to the Action Group:
+
+After saving, you need to add the Logic App as a receiver in the Action Group.
+Replace <sub-id> with your subscription ID (from az account show --query id -o tsv) and <logic-app-callback-url> with the URL you copied from the designer.
+
+Step 7 - Build the Cost Dashboard in Azure Workbooks
+Azure Workbooks is a reporting tool built into the Azure portal. You will build a dashboard that shows spending by service and by resource group.
+
+10. In the portal, search for Monitor → click Workbooks in the left menu
+11. Click + New
+12. Click + Add → Add query
+13. Set the Data source to Azure Resource Graph
+14. Paste the following query:
+15. Click Run Query to verify it works, then click Done Editing
+16. Click + Add → Add metric → select your subscription → choose Cost Management as the resource type
+17. Click Save → give the workbook a name like Cost Visibility Dashboard → select your resource group → click Apply
+
+Your workbook is now saved and accessible from the Workbooks section of Azure Monitor any time you open the portal.
+
+Verification Checklist
+
+   Resource group rg-cost-dashboard-[yourname] exists in the portal
+   Budget budget-cost-[yourname] appears in Cost Management → Budgets
+   Action group ag-cost-alerts-[yourname] exists in Monitor → Action groups
+   Logic App la-cost-alert-[yourname] exists and shows a green Enabled status
+   Logic App designer shows an HTTP trigger and a Send email action
+   Log Analytics workspace law-cost-[yourname] exists
+   Azure Workbook is saved and visible in Monitor → Workbooks
 
 
 
-
-
-
-
-
-
-
-
-
-- Logic App Configuration
-- Testing and validation 
-
-- Building the cost dashboard in Azure Workbooks
 
 - Considerations
 Cost Management data is not real-time — new usage can take several hours to appear in dashboards and trigger alerts
