@@ -41,8 +41,50 @@ az account show
 cd "$HOME\cost-dashboard-001"
 New-Item -ItemType File main.tf, variables.tf, outputs.tf, terraform.tfvars
 
+Terraform Configuration
 
-Step 1- Writing variables.tf (Posted in variables.tf Tab)
+Step 1 - Write variables.tf
+
+Defines input variables for the deploying user's name, Azure region, alert email address, and resource tags - the only values that need to change between environments. (Shown in variables.tf folder)
+
+Step 2- Write terraform.tfvars: (Shown in terraform.tfvars folder)
+Replace your.email@example.com with the email address where you want to receive cost alerts.
+
+Step 3- Write main.tf (Shown in main.tf folder)
+The main Terraform file deploys the Azure infrastructure required for the cost visibility system.
+Each resource block is explained before the code so you understand what it does and why it is written the way it is.
+
+It creates:
+
+Resource group
+Log Analytics Workspace
+Azure Monitor Action Group
+Azure Consumption Budget
+Logic App workflow container
+Subscription diagnostic settings
+
+outputs.tf
+The outputs file prints useful values to the terminal after terraform apply completes.
+
+Outputs include:
+
+Resource group name
+Log Analytics Workspace ID
+Logic App access endpoint
+Action Group ID
+These values make the portal configuration and post-deployment validation easier.
+
+
+Step 2- Write terraform.tfvars:
+
+yourname    = "yourname"
+location    = "East US"
+alert_email = "your.email@example.com"
+Update the start_date in main.tf to the first day of the current or a future month:
+
+start_date = "2026-06-01T00:00:00Z"
+
+
 
 - Logic App Configuration
 
