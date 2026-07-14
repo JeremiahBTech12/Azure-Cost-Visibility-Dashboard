@@ -2,10 +2,10 @@ Azure Cost Visibility Dashboard
 
 - Video walkthrough: Azure Cost Visibility Dashboard
 
-Project Overview
+Project Overview:
 A cost tracking and alerting system that gives business owners real-time visibility into their Azure spend, automatically alerts them before bills become a problem, and presents spending in plain language through a dashboard.
 
-Business Problem
+Business Problem:
 Most small businesses move to the cloud because they're expecting to save money over having to manage their own servers. Then the invoices start arriving full of line items like "Microsoft.Compute/virtualMachines — $340" that nobody in the business can interpret, predict, or justify to anyone else.
 
 This project remedies that completely. I built a system that:
