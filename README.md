@@ -87,7 +87,7 @@ variable "tags" {
 ### Write terraform.tfvars
 
 ```terraform
-yourname    = "charles"
+yourname    = "jeremiah"
 location    = "East US"
 alert_email = "your.email@example.com"
 ```
