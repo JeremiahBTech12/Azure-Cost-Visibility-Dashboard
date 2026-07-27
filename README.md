@@ -77,9 +77,7 @@
 
 ## Logic App Configuration (In Portal)
 
-###  Terraform provisions the Logic App container. The workflow itself is a two-step setup in the portal.
-
-Add the trigger and email action
+###  Terraform provisions the Logic App container. The workflow itself is a two-step setup in the portal. Add the trigger and email action
 
 - Go to la-cost-alert-[yourname] in the portal
 - Open Logic app designer
