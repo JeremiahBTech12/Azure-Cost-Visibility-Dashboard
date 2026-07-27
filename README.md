@@ -6,10 +6,10 @@ Jeremiah Brown | Azure Cloud Engineer | Linkedin: https://www.linkedin.com/in/je
 ## Project Overview:
 
 ### 
-Most small businesses move to the cloud because they're expecting to save on costs, then the invoices start arriving full of line items like "Microsoft.Compute/VirtualMachines — $340" that nobody in the business could predict, interpret, or justify to anyone else.
+Many small businesses migrate to the cloud expecting to reduce costs, only to discover that their monthly invoices are filled with charges such as “Microsoft.Compute/VirtualMachines — $340.” Without the technical context behind these services, business owners and stakeholders often struggle to predict expenses, understand what they’re paying for, or justify those costs to others.
 
 ### 
-That's why i've built a cost tracking and alerting system that gives business stakeholder's real-time visibility into their Azure spend, automatically sending notification alerts when budget thresholds are reached and bills become a problem. Everything is also surfaced on a simple dashboard that makes sense to non- technical professionals and stakeholder's.
+That's why i've built a cost tracking and alerting system that gives business stakeholder's real-time visibility into their Azure spend, automatically sending notification alerts when budget thresholds are reached and bills become a problem. Everything is also surfaced on a simple dashboard that makes sense to non-technical professionals and stakeholder's.
 
 ## Business Problem
 ###
