@@ -55,8 +55,9 @@
 
 
 ## Terraform Configuration
-### Step 1 — Write variables.tf
+###  Write variables.tf
 
+```terraform
 variable "yourname" {
   description = "Your name, lowercase, no spaces. Used to make resource names unique."
   type        = string
@@ -81,28 +82,29 @@ variable "tags" {
     managed_by  = "terraform"
   }
 }
+```
 
-Step 2 — Write terraform.tfvars
+### Write terraform.tfvars
 
+```terraform
 yourname    = "charles"
 location    = "East US"
 alert_email = "your.email@example.com"
+```
 
 
 
 Replace your.email@example.com with the email address where you want to receive cost alerts.
 
-Step 3 — Write main.tf
+### Write main.tf
 
 Each resource block is explained before the code so you understand what it does and why it is written the way it is.
-
-
-
 
 Provider and data sources
 
 The azurerm provider is the Terraform plugin that knows how to talk to Azure. features {} is required but can be left empty for most configurations. The azurerm_client_config data source reads your current az login session and gives Terraform your subscription ID and tenant ID, which are needed for budget and alert scope configuration.
 
+```terraform
 terraform {
   required_providers {
     azurerm = {
@@ -117,33 +119,31 @@ provider "azurerm" {
 }
  
 data "azurerm_client_config" "current" {}
+```
 
-
-
-
-
-
-Resource group
+### Resource group
 
 Every Azure resource must live inside a resource group. Think of it as a folder — it holds all the resources for this project together, controls who has access, and makes cleanup easy (deleting the resource group deletes everything inside it).
 
+```terraform
 resource "azurerm_resource_group" "main" {
   name     = "rg-cost-dashboard-${var.yourname}"
   location = var.location
   tags     = var.tags
 }
+```
 
 
 
 
 
-
-Log Analytics Workspace
+### Log Analytics Workspace
 
 Log Analytics is Azure's central logging and querying service. It stores activity logs, diagnostic data, and metrics from across your Azure resources in one place. The sku = "PerGB2018" means you pay only for data ingested — there is no flat monthly fee, and at lab scale the cost is negligible.
 
 The retention_in_days = 30 setting means log data is automatically deleted after 30 days. This is the minimum allowed value and keeps costs low for a lab environment.
 
+```terraform
 resource "azurerm_log_analytics_workspace" "main" {
   name                = "law-cost-${var.yourname}"
   location            = var.location
@@ -152,13 +152,9 @@ resource "azurerm_log_analytics_workspace" "main" {
   retention_in_days   = 30
   tags                = var.tags
 }
+```
 
-
-
-
-
-
-Action Group
+### Action Group
 
 An Action Group is Azure Monitor's way of defining what should happen when an alert fires. It is a reusable list of notification targets — email addresses, SMS numbers, Logic App webhooks, and more. You define it once and attach it to as many alert rules as you like.
 
@@ -166,6 +162,7 @@ short_name is required and must be 12 characters or less. It appears in SMS noti
 
 The email_receiver block defines who gets notified. Setting use_common_alert_schema = true means the email body uses a standardized format that works consistently across all alert types — this is the recommended setting.
 
+```terraform
 resource "azurerm_monitor_action_group" "email_alerts" {
   name                = "ag-cost-alerts-${var.yourname}"
   resource_group_name = azurerm_resource_group.main.name
@@ -179,11 +176,7 @@ resource "azurerm_monitor_action_group" "email_alerts" {
  
   tags = var.tags
 }
-
-
-
-
-
+```
 
 Budget with alert thresholds
 
@@ -197,6 +190,7 @@ amount = 200 sets the total monthly budget at $200. This is the ceiling — the 
 
 Each notification block defines one alert threshold. threshold = 25 means "alert when actual spend reaches 25% of the budget amount." operator = "GreaterThan" means the alert fires when spending crosses the threshold going up. The contact_groups list connects each alert to the Action Group you created above, which is what actually sends the email.
 
+```terraform
 resource "azurerm_consumption_budget_subscription" "main" {
   name            = "budget-cost-${var.yourname}"
   subscription_id = data.azurerm_client_config.current.subscription_id
@@ -205,7 +199,7 @@ resource "azurerm_consumption_budget_subscription" "main" {
   time_grain = "Monthly"
  
   time_period {
-    start_date = "2026-03-01T00:00:00Z"
+    start_date = "2026-07-01T00:00:00Z"
   }
  
   notification {
@@ -235,25 +229,26 @@ resource "azurerm_consumption_budget_subscription" "main" {
     contact_groups = [azurerm_monitor_action_group.email_alerts.id]
   }
 }
+```
 
 
 
 
 
-
-Logic App Workflow
+### Logic App Workflow
 
 A Logic App is Azure's low-code automation service. It connects different systems together through triggers and actions — when something happens (trigger), do something else (action). In this project, the Logic App receives a webhook call from Azure Monitor when a budget alert fires, formats the alert data into a readable message, and sends a notification email.
 
 logic_app_workflow creates the Logic App container. The workflow definition (the actual trigger and action logic) is managed separately in the portal after deployment — Terraform provisions the resource, and you configure the steps in the visual designer. This is intentional: workflow logic is easier to build and test in the visual designer than in Terraform HCL.
 
+```terraform
 resource "azurerm_logic_app_workflow" "cost_alert" {
   name                = "la-cost-alert-${var.yourname}"
   location            = var.location
   resource_group_name = azurerm_resource_group.main.name
   tags                = var.tags
 }
-
+```
 
 
 
@@ -265,6 +260,7 @@ This resource tells Azure to forward the subscription's activity log into your L
 
 target_resource_id is the subscription itself (not an individual resource), which is why the scope is the full subscription ID. log_analytics_workspace_id is where the logs get written.
 
+```terraform
 resource "azurerm_monitor_diagnostic_setting" "subscription_logs" {
   name                       = "diag-sub-to-law"
   target_resource_id         = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
@@ -282,11 +278,13 @@ resource "azurerm_monitor_diagnostic_setting" "subscription_logs" {
     category = "Policy"
   }
 }
+```
 
-Step 4 — Write outputs.tf
+### Write outputs.tf
 
 Outputs print useful values to your terminal after terraform apply completes. They save you from hunting through the portal for information you need for the next steps.
 
+```terraform
 output "resource_group_name" {
   value = azurerm_resource_group.main.name
 }
@@ -303,7 +301,7 @@ output "logic_app_callback_url" {
 output "action_group_id" {
   value = azurerm_monitor_action_group.email_alerts.id
 }
-
+```
 
 ## Deploy (Terraform)
 
@@ -317,26 +315,40 @@ output "action_group_id" {
 
 ## Logic App Configuration (In Portal)
 
-###  Terraform provisions the Logic App container. The workflow itself is a two-step setup in the portal. Add the trigger and email action
+### 
+Terraform created the Logic App container. Now you will add the trigger and action steps using the visual designer.
+
+- In the Azure portal, navigate to your resource group rg-cost-dashboard-[yourname]
+- Click on la-cost-alert-[yourname]
+- In the left menu, click Logic app designer
+- Click Add a trigger → search for HTTP → select When a HTTP request is received
+- Copy the HTTP POST URL that appears — this is the webhook URL Azure Monitor will call when a budget alert fires
+- Click + New step → search for Office 365 Outlook → select Send an email (V2)
+- Sign in with your Microsoft account when prompted
+Fill in the email fields:
+- To: your alert email address
+- Subject: Azure Cost Alert — Budget Threshold Reached
+- Body: Click Add dynamic content and add the Body field from the HTTP trigger — this contains the full alert details
+Click Save
+
+Connect the Logic App to the Action Group:
+
+After saving, you need to add the Logic App as a receiver in the Action Group.
+
+### 
+Windows (PowerShell):
+```terraform
+az monitor action-group update `
+  --name ag-cost-alerts-charles `
+  --resource-group rg-cost-dashboard-charles `
+  --add-action logicapp la-webhook la-cost-alert-charles `
+    /subscriptions/<sub-id>/resourceGroups/rg-cost-dashboard-charles/providers/Microsoft.Logic/workflows/la-cost-alert-charles `
+    <logic-app-callback-url>
+```
 
 
-- Go to la-cost-alert-[yourname] in the portal
-- Open Logic app designer
-- Add trigger → search "request" → select When an HTTP request is received
-- Save — copy the HTTP POST URL that generates
-- Add action → search Gmail or Office 365 Outlook → select Send an email
-- Fill in To, Subject, and Body (use dynamic content → Body from the HTTP trigger)
-- Save
-Connect it to the Action Group
+Replace <sub-id> with your subscription ID (from az account show --query id -o tsv) and <logic-app-callback-url> with the URL you copied from the designer.
 
-
-- Go to ag-cost-alerts-[yourname] in the portal → Edit
-Under Actions, add a new row:
-- Action type: Logic App
-- Name: la-webhook
-- Selected: your Logic App
-- Save changes
-Once set up, any budget threshold breach triggers the full chain: Cost Management → Action Group → Logic App → inbox.
 
 
 
