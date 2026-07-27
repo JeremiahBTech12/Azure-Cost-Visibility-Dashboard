@@ -366,29 +366,43 @@ Your workbook is now saved and accessible from the Workbooks section of Azure Mo
 - Log Analytics workspace law-cost-[yourname] exists
 - Azure Workbook is saved and visible in Monitor → Workbooks
 
-
 ## Troubleshooting
 
-###
-Error
-Cause
-Resolution
-BudgetStartDateInvalid
-Start date must be the first of a current or future month
-Update start_date in main.tf to the first of the current month
-AuthorizationFailed on budget
-Your account may need Cost Management Contributor role
-Assign it: az role assignment create --role "Cost Management Contributor" --assignee <your-email> --scope /subscriptions/<sub-id>
-Logic App email step asks for sign-in
-Office 365 connection requires interactive auth
-Sign in through the portal designer — this cannot be automated by Terraform
-Alert email not received
-Budget thresholds require actual spend to cross the limit
-Use the portal to manually trigger a test action from the Action Group to verify email delivery
 
 
+| Error | Cause | Resolution |
+
+
+
+|--------|-------|------------|
+
+
+
+| **BudgetStartDateInvalid** | Start date must be the first of the current or a future month. | Update `start_date` in `main.tf` to the first day of the current month. |
+
+
+
+| **AuthorizationFailed** on budget | Your account may need the **Cost Management Contributor** role. | Assign it using:<br>`az role assignment create --role "Cost Management Contributor" --assignee <user> --scope /subscriptions/<subscription-id>` |
+
+
+
+| **Logic App email step asks for sign-in** | Office 365 connection requires interactive authentication. | Sign in through the Azure Portal Logic App Designer. This step cannot be automated by Terraform. |
+
+
+
+| **Alert email not received** | Budget thresholds require actual spend to cross the configured limit. | Use the Azure Portal to manually trigger a test action from the Action Group to verify email delivery. |
 
 ## Teardown
 
 "Terraform destroy"
 Removes everything Terraform created. The Workbook was created manually in the portal and will need to be deleted there separately.
+
+## Thank you for following along watching me create real-world cloud solutions. This is only part of my Azure cloud portfolio.
+
+
+
+
+
+
+
+
