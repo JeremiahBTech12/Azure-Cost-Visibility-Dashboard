@@ -19,7 +19,7 @@
 ## Architecture Flow
 
 ### The system is event-driven. Azure Cost Management evaluates subscription spend against the monthly budget. When actual costs cross a defined threshold, it fires an event to an Action Group - a reusable notification hub that knows who to contact and how. The Action Group triggers a Logic App, which formats the alert into a readable email and delivers it to the right inbox. Everything that happens between the budget breach and the email landing is automated.
-All supporting infrastructure - the Log Analytics workspace, diagnostic settings, and Workbook dashboard - runs alongside this flow to give the full picture of where spend is going and why.
+### All supporting infrastructure - the Log Analytics workspace, diagnostic settings, and Workbook dashboard - runs alongside this flow to give the full picture of where spend is going and why.
 
 <img width="1920" height="1080" alt="Azure Cost Management Consumption Budget (3)" src="https://github.com/user-attachments/assets/e0cd025a-3fb2-40ba-926e-993a6a55007e" />
 
