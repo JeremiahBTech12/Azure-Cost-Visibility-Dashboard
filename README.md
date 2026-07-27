@@ -9,18 +9,18 @@ Jeremiah Brown | Azure Cloud Engineer | Linkedin: https://www.linkedin.com/in/je
 Many small businesses migrate to the cloud expecting to reduce costs, only to discover that their monthly invoices are filled with charges such as “Microsoft.Compute/VirtualMachines — $340.” Without the technical context behind these services, business owners and stakeholders often struggle to predict expenses, understand what they’re paying for, or justify those costs to others.
 
 ### 
-That's why i've built a cost tracking and alerting system that gives business stakeholder's real-time visibility into their Azure spend, automatically sending notification alerts when budget thresholds are reached and bills become a problem. Everything is also surfaced on a simple dashboard that makes sense to non-technical professionals and stakeholder's.
+That's why i've built a cost tracking and alerting system that gives business stakeholder's real-time visibility into their Azure spend, automatically sending notification alerts when budget thresholds are reached and bills become a problem. Everything is also surfaced on a simple dashboard that makes sense to non-technical professionals.
 
 ## Business Problem
 ###
-As Azure environments grow to include multiple services, resource groups, and usage categories, subscription costs become increasingly difficult for non-technical stakeholders to understand. This project solves that challenge by implementing an automated monitoring solution that tracks subscription-level spending and delivers clear, actionable cost insights to the appropriate stakeholders before expenses become a concern.
+As Azure environments grow to include multiple services, resource groups, and usage categories, subscription costs become increasingly difficult to breakdown. This project solves that challenge by implementing an automated monitoring solution that tracks subscription-level spending and delivers clear, actionable cost insights to the appropriate stakeholders before expenses become a concern.
 
 
 ### What it provides:
 -	Tracks spend across all Azure services and translates it into categories for business owners.
 -	 Fires automatic alerts when spending hits thresholds ($50, $100, $200)
 -	Sends email notifications via Logic Apps when an alert triggers
--	Displays a dashboard in Azure Workbooks showing spend by service, Resource, and resource group.
+-	Displays a dashboard in Azure Workbooks showing spend by Resource Group, Resource, and Service. 
 
 
 ## Architecture Flow
@@ -31,7 +31,11 @@ The system operates using an event-driven architecture. Azure Cost Management co
 ### 
 Supporting this workflow are several monitoring and visualization components. The Log Analytics workspace, diagnostic settings, and Azure Workbook dashboard operate alongside the notification pipeline to provide comprehensive visibility into spending trends, resource activity, and the factors driving subscription costs.
 
-<img width="1920" height="1080" alt="Azure Cost Management Consumption Budget (3)" src="https://github.com/user-attachments/assets/e0cd025a-3fb2-40ba-926e-993a6a55007e" />
+
+<img width="1920" height="1080" alt="Azure Cost Management Consumption Budget (4)" src="https://github.com/user-attachments/assets/448ab72b-b0b0-4333-ac6e-20ac61193550" />
+
+
+
 
 ## Tools & Services Used
 
@@ -334,7 +338,7 @@ output "action_group_id" {
 
 ## Building The Cost Dashboard In Azure Workbooks
 
-### Azure Workbooks is a reporting tool built into the Azure portal. You will build a dashboard that shows spending by service and by resource group.
+### Azure Workbooks is a reporting tool built into the Azure portal. You will build a dashboard that shows spending by resource group, resource, and service.
 
 - In the portal, search for Monitor → click Workbooks in the left menu
 - Click + New
@@ -342,9 +346,11 @@ output "action_group_id" {
 - Set the Data source to Azure Resource Graph
 - Paste the following query:
 
+```terraform
 resourcecontainers
 | where type == "microsoft.resources/subscriptions/resourcegroups"
 | project resourceGroup, location
+```
 
 - Click Run Query to verify it works, then click Done Editing
 <img width="1055" height="278" alt="la runs v2" src="https://github.com/user-attachments/assets/e65c06fa-c081-4903-bd2f-4e4e6b406e27" />
@@ -397,7 +403,7 @@ Your workbook is now saved and accessible from the Workbooks section of Azure Mo
 "Terraform destroy"
 Removes everything Terraform created. The Workbook was created manually in the portal and will need to be deleted there separately.
 
-## Thank you for following along watching me create real-world cloud solutions. This is only part of my Azure cloud portfolio.
+## Thank you for following along watching me create real-world cloud solutions. This is only part of my full Azure cloud portfolio.
 
 
 
