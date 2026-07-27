@@ -4,13 +4,17 @@
 Azure Cloud Engineer | Linkedin: https://www.linkedin.com/in/jeremiah-brown12/
 
 ## Project Overview:
-### A cost tracking and alerting system that gives business owners real-time visibility into their Azure spend, automatically alerts them before bills become a problem, and presents spending in plain language through a dashboard.
-
-## Business Problem
 
 ### Most small businesses move to the cloud because they're expecting to save on costs, then the invoices start arriving full of line items like "Microsoft.Compute/VirtualMachines — $340" that nobody in the business could predict, interpret, or justify to anyone else.
 
-### This project remedies that completely. I built a system that:
+### That's why i've built a cost tracking and alerting system that gives business stakeholder's real-time visibility into their Azure spend, automatically sending notification alerts when budget thresholds are reached and bills become a problem. Everything is also surfaced on a simple dashboard that makes sense to non- technical professionals and stakeholder's.
+
+## Business Problem
+###
+As Azure environments grow to include multiple services, resource groups, and usage categories, subscription costs become increasingly difficult for non-technical stakeholders to understand. This project solves that challenge by implementing an automated monitoring solution that tracks subscription-level spending and delivers clear, actionable cost insights to the appropriate stakeholders before expenses become a concern.
+
+
+### What it provides:
 -	Tracks spend across all Azure services and translates it into categories for business owners.
 -	 Fires automatic alerts when spending hits thresholds ($50, $100, $200)
 -	Sends email notifications via Logic Apps when an alert triggers
@@ -19,8 +23,9 @@ Azure Cloud Engineer | Linkedin: https://www.linkedin.com/in/jeremiah-brown12/
 
 ## Architecture Flow
 
-### The system is event-driven. Azure Cost Management evaluates subscription spend against the monthly budget. When actual costs cross a defined threshold, it fires an event to an Action Group - a reusable notification hub that knows who to contact and how. The Action Group triggers a Logic App, which formats the alert into a readable email and delivers it to the right inbox. Everything that happens between the budget breach and the email landing is automated.
-### All supporting infrastructure - the Log Analytics workspace, diagnostic settings, and Workbook dashboard - runs alongside this flow to give the full picture of where spend is going and why.
+### The system operates using an event-driven architecture. Azure Cost Management continuously monitors subscription spending against a predefined monthly budget. When actual costs exceed a configured threshold, it generates an event that is sent to an Action Group—a reusable notification service responsible for determining who should be notified and through which communication method. The Action Group then triggers a Logic App, which formats the alert into a clear, easy-to-read email before delivering it to the appropriate recipients. From the moment the budget threshold is exceeded to the time the notification reaches the inbox, the entire process is fully automated.
+
+Supporting this workflow are several monitoring and visualization components. The Log Analytics workspace, diagnostic settings, and Azure Workbook dashboard operate alongside the notification pipeline to provide comprehensive visibility into spending trends, resource activity, and the factors driving subscription costs.
 
 <img width="1920" height="1080" alt="Azure Cost Management Consumption Budget (3)" src="https://github.com/user-attachments/assets/e0cd025a-3fb2-40ba-926e-993a6a55007e" />
 
@@ -52,8 +57,7 @@ Azure Cloud Engineer | Linkedin: https://www.linkedin.com/in/jeremiah-brown12/
   - Terraform
   - Azure CLI
   - An active Azure subscription
-  - Sufficient permissions to create budgets, resource groups, monitoring resources, and Logic Apps
-
+  
 
 ## Terraform Configuration
 ###  Write variables.tf
@@ -315,41 +319,12 @@ output "action_group_id" {
 
 
 ## Logic App Configuration (In Portal)
+### Terraform was used to deploy the Logic App container, while the workflow itself was configured through the Azure Portal using the visual designer. The Logic App consists of two primary components:
+- Trigger: When an HTTP request is received
+- Action: Send an email notification using Gmail or Office 365 Outlook
+ Once the workflow was saved, Azure automatically generated a callback URL for the HTTP trigger. That URL was then registered as a Logic App receiver within the Azure Monitor Action Group, completing the end-to-end alert pipeline and enabling automated email notifications whenever a budget threshold is exceeded.
 
-### 
-Terraform created the Logic App container. Now you will add the trigger and action steps using the visual designer.
-
-- In the Azure portal, navigate to your resource group rg-cost-dashboard-[yourname]
-- Click on la-cost-alert-[yourname]
-- In the left menu, click Logic app designer
-- Click Add a trigger → search for HTTP → select When a HTTP request is received
-- Copy the HTTP POST URL that appears — this is the webhook URL Azure Monitor will call when a budget alert fires
-- Click + New step → search for Office 365 Outlook → select Send an email (V2)
-- Sign in with your Microsoft account when prompted
-Fill in the email fields:
-- To: your alert email address
-- Subject: Azure Cost Alert — Budget Threshold Reached
-- Body: Click Add dynamic content and add the Body field from the HTTP trigger — this contains the full alert details
-Click Save
-
-Connect the Logic App to the Action Group:
-
-After saving, you need to add the Logic App as a receiver in the Action Group.
-
-### 
-Windows (PowerShell):
-```terraform
-az monitor action-group update `
-  --name ag-cost-alerts-charles `
-  --resource-group rg-cost-dashboard-charles `
-  --add-action logicapp la-webhook la-cost-alert-charles `
-    /subscriptions/<sub-id>/resourceGroups/rg-cost-dashboard-charles/providers/Microsoft.Logic/workflows/la-cost-alert-charles `
-    <logic-app-callback-url>
-```
-
-
-Replace <sub-id> with your subscription ID (from az account show --query id -o tsv) and <logic-app-callback-url> with the URL you copied from the designer.
-
+<img width="1274" height="587" alt="image" src="https://github.com/user-attachments/assets/4dffbadd-5f9b-47b8-b848-4042e44517cb" />
 
 
 
@@ -368,8 +343,8 @@ resourcecontainers
 | project resourceGroup, location
 
 - Click Run Query to verify it works, then click Done Editing
-- Click + Add → Add metric → select your subscription → choose Cost Management as the resource type
-- Click Save → give the workbook a name like Cost Visibility Dashboard → select your resource group → click Apply
+  
+Save the workbook as Cost Visibility Dashboard within your resource group. From there, you can expand the dashboard with additional queries to meet your reporting needs, such as cost by tag, spending trends over time, or resource counts by service. For this project, I included query visualizations for Resource Groups, Resources, and Services, providing a clear breakdown of where subscription costs are being incurred.
 
 Your workbook is now saved and accessible from the Workbooks section of Azure Monitor any time you open the portal.
 
