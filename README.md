@@ -67,12 +67,12 @@
 
 ## Deploy (Terraform)
 
-### - terraform init
+### 
+- terraform init
 - terraform plan
 - terraform apply
 - When prompted, enter:
-
-yes
+- yes
 
 
 ## Logic App Configuration (In Portal)
@@ -122,7 +122,8 @@ Your workbook is now saved and accessible from the Workbooks section of Azure Mo
 
 ## Verification Checklist
 
-### - Resource group rg-cost-dashboard-[yourname] exists in the portal
+### 
+- Resource group rg-cost-dashboard-[yourname] exists in the portal
 - Budget budget-cost-[yourname] appears in Cost Management → Budgets
 - Action group ag-cost-alerts-[yourname] exists in Monitor → Action groups
 - Logic App la-cost-alert-[yourname] exists and shows a green Enabled status
@@ -133,7 +134,8 @@ Your workbook is now saved and accessible from the Workbooks section of Azure Mo
 
 ## Troubleshooting
 
-### Error
+###
+Error
 Cause
 Resolution
 BudgetStartDateInvalid
