@@ -343,6 +343,8 @@ resourcecontainers
 | project resourceGroup, location
 
 - Click Run Query to verify it works, then click Done Editing
+<img width="1055" height="278" alt="la runs v2" src="https://github.com/user-attachments/assets/e65c06fa-c081-4903-bd2f-4e4e6b406e27" />
+
   
 Save the workbook as Cost Visibility Dashboard within your resource group. From there, you can expand the dashboard with additional queries to meet your reporting needs, such as cost by tag, spending trends over time, or resource counts by service. For this project, I included query visualizations for Resource Groups, Resources, and Services, providing a clear breakdown of where subscription costs are being incurred.
 
