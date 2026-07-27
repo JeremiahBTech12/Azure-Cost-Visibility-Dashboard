@@ -79,6 +79,7 @@
 
 ###  Terraform provisions the Logic App container. The workflow itself is a two-step setup in the portal. Add the trigger and email action
 
+
 - Go to la-cost-alert-[yourname] in the portal
 - Open Logic app designer
 - Add trigger → search "request" → select When an HTTP request is received
@@ -88,6 +89,7 @@
 - Save
 - Connect it to the Action Group
 
+
 - Go to ag-cost-alerts-[yourname] in the portal → Edit
 Under Actions, add a new row:
 - Action type: Logic App
@@ -95,6 +97,7 @@ Under Actions, add a new row:
 - Selected: your Logic App
 - Save changes
 Once set up, any budget threshold breach triggers the full chain: Cost Management → Action Group → Logic App → inbox.
+
 
 
 ## Building The Cost Dashboard In Azure Workbooks
