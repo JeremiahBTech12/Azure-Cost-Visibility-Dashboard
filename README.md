@@ -25,9 +25,11 @@ As Azure environments grow to include multiple services, resource groups, and us
 
 ## Architecture Flow
 
-### The system operates using an event-driven architecture. Azure Cost Management continuously monitors subscription spending against a predefined monthly budget. When actual costs exceed a configured threshold, it generates an event that is sent to an Action Group—a reusable notification service responsible for determining who should be notified and through which communication method. The Action Group then triggers a Logic App, which formats the alert into a clear, easy-to-read email before delivering it to the appropriate recipients. From the moment the budget threshold is exceeded to the time the notification reaches the inbox, the entire process is fully automated.
+### 
+The system operates using an event-driven architecture. Azure Cost Management continuously monitors subscription spending against a predefined monthly budget. When actual costs exceed a configured threshold, it generates an event that is sent to an Action Group—a reusable notification service responsible for determining who should be notified and through which communication method. The Action Group then triggers a Logic App, which formats the alert into a clear, easy-to-read email before delivering it to the appropriate recipients. From the moment the budget threshold is exceeded to the time the notification reaches the inbox, the entire process is fully automated.
 
-### Supporting this workflow are several monitoring and visualization components. The Log Analytics workspace, diagnostic settings, and Azure Workbook dashboard operate alongside the notification pipeline to provide comprehensive visibility into spending trends, resource activity, and the factors driving subscription costs.
+### 
+Supporting this workflow are several monitoring and visualization components. The Log Analytics workspace, diagnostic settings, and Azure Workbook dashboard operate alongside the notification pipeline to provide comprehensive visibility into spending trends, resource activity, and the factors driving subscription costs.
 
 <img width="1920" height="1080" alt="Azure Cost Management Consumption Budget (3)" src="https://github.com/user-attachments/assets/e0cd025a-3fb2-40ba-926e-993a6a55007e" />
 
