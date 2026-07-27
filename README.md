@@ -25,7 +25,8 @@
 
 ## Tools & Services Used
 
-### - IaC	Terraform-(azurerm ~> 3.0)
+###
+- IaC	Terraform-(azurerm ~> 3.0)
 - Cost monitoring- Azure Cost Management Budgets
 - Alerting-	Azure Monitor Action Groups
 - Automation-	Azure Logic Apps
@@ -35,7 +36,8 @@
 
 ## What Gets Built
 
-### rg-cost-dashboard-[yourname]
+###
+- rg-cost-dashboard-[yourname]
 - Azure Monitor Action Group        → sends email when alert fires
 -  Azure Monitor Alert Rules (x3)    → watch for $50 / $100 / $200 spend
 -   Log Analytics Workspace           → stores diagnostic and activity data
