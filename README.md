@@ -1,6 +1,6 @@
 # Azure Cost Visibility Dashboard
 
-## Video Walkthrough: Azure Cost Visibility Dashboard
+## Video Walkthrough: Azure Cost Visibility Dashboard: https://www.loom.com/share/0be0535793c544b8a9bbd35e808f04b3
 Jeremiah Brown | Azure Cloud Engineer | Linkedin: https://www.linkedin.com/in/jeremiah-brown12/
 
 ## Project Overview:
